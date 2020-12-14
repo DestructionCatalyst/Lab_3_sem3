@@ -57,7 +57,6 @@ void basicGraphTest()
     //std::cout << *dynamic_cast<HashMap<int, AdjacencyList<int>*>*>(g->vertices) << std::endl;
     ASSERT_THROWS(g->EdgeLength(1, 3), vertex_not_found);
 
-    std::cout << g->EdgeLength(1, 1) << std::endl;
     ASSERT_EQUALS(g->EdgeLength(1, 1), 0);
 
 

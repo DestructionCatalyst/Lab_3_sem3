@@ -29,15 +29,15 @@ public:
 private:
 	Sequence<std::pair<T, int>>* adjacent = new ListSequence<std::pair<T, int>>();
 public:
-	int SequenceSize() const
+	int SequenceSize() 
 	{
 		return adjacent->GetLength();
 	}
-	Edge GetEdge()
+	Edge<T> GetEdge()
 	{
 		
 	}
-	int EdgeLength(T vertex) const
+	int EdgeLength(T vertex) 
 	{
 		int vertexIndex = Find(vertex);
 
@@ -75,7 +75,7 @@ public:
 	}
 
 private:
-	int Find(T vertex)
+	int Find(T vertex) 
 	{
 		AdjacentEdgesIterator iter = begin();
 
