@@ -20,9 +20,27 @@ public:
 		vertices(new HashMap<T, AdjacencyList<T>*>(hashFunc))
 	{}
 
+	int VertexCount()
+	{
+		return vertices->Count();
+	}
+
 	Edge<T>* GetEdge(T edgeStart, T edgeEnd)
 	{
 		return TryGetAdjacent(edgeStart)->GetEdge(edgeEnd);
+	}
+
+	bool AreConnected(T edgeStart, T edgeEnd)
+	{
+		try {
+			if (GetEdge(edgeStart, edgeEnd) == nullptr)
+				return false;
+			else
+				return true;
+		}
+		catch(vertex_not_found){
+			return false;
+		}
 	}
 
 	int EdgeLength(T edgeStart, T edgeEnd)

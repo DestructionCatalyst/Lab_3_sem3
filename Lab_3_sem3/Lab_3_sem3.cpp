@@ -6,6 +6,7 @@
 
 #include "AdjacencyList.h"
 #include "Graph.h"
+#include "GraphFactory.h"
 
 using namespace dictionary;
 
@@ -48,9 +49,11 @@ void basicGraphTest()
 
     ASSERT_EQUALS(g->AdjacentCount(2), 2);
     ASSERT_EQUALS(g->EdgeLength(1, 3), 20);
+    TestEnvironment::Assert(g->AreConnected(1, 3));
 
     g->RemoveAdjacent(2, 3);
     ASSERT_THROWS(g->EdgeLength(2, 3), vertex_not_found);
+    TestEnvironment::Assert(!g->AreConnected(2, 3));
 
     g->RemoveVertex(3);
 
@@ -62,12 +65,44 @@ void basicGraphTest()
 
 }
 
+void topologyGenerationTest()
+{
+    Graph<int>* k7 = IntegerGraphFactory::Complete(7);
+
+    for(int i = 0; i < 7; i++)
+        for(int j = 0; j < 7; j++)
+            if (i != j) 
+                TestEnvironment::Assert(k7->AreConnected(i, j));
+            
+    Graph<int>* p10 = IntegerGraphFactory::Chain(10, 1, Direction::BACKWARDS);
+
+    
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
+            if (i == j + 1)
+                TestEnvironment::Assert(p10->AreConnected(i, j));
+            else
+                TestEnvironment::Assert(!p10->AreConnected(i, j));
+                
+    Graph<int>* c10 = IntegerGraphFactory::Cycle(10, 1, Direction::CLOCKWISE);
+
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
+            if ((j == i + 1) || (i == 9 && j == 0))
+                TestEnvironment::Assert(c10->AreConnected(i, j));
+            else
+                TestEnvironment::Assert(!c10->AreConnected(i, j));
+    
+
+}
+
 int main()
 {
     TestEnvironment* env = new TestEnvironment();
 
     ADD_NEW_TEST(*env, "AdjacencyList test", testAdjacencyList);
     ADD_NEW_TEST(*env, "Basic graph test", basicGraphTest);
+    ADD_NEW_TEST(*env, "Topology generation test", topologyGenerationTest);
 
     env->RunAll();
 
