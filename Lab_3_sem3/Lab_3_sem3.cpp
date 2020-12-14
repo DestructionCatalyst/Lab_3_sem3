@@ -71,6 +71,5 @@ int main()
 
     env->RunAll();
 
-    std::cout << "Hello World!\n";
 }
 

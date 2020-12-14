@@ -20,6 +20,11 @@ public:
 		vertices(new HashMap<T, AdjacencyList<T>*>(hashFunc))
 	{}
 
+	Edge<T>* GetEdge(T edgeStart, T edgeEnd)
+	{
+		return TryGetAdjacent(edgeStart)->GetEdge(edgeEnd);
+	}
+
 	int EdgeLength(T edgeStart, T edgeEnd)
 	{
 		auto startVertex = TryGetAdjacent(edgeStart);

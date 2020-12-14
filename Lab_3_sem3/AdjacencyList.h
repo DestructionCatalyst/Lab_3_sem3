@@ -25,35 +25,45 @@ template<class T>
 class AdjacencyList
 {
 public:
-	typedef iterators::ListIterator<std::pair<T, int>> AdjacentEdgesIterator;
+	typedef iterators::ListIterator<Edge<T>*> AdjacentEdgesIterator;
 private:
-	Sequence<std::pair<T, int>>* adjacent = new ListSequence<std::pair<T, int>>();
+	Sequence<Edge<T>*>* adjacent = new ListSequence<Edge<T>*>();
 public:
-	int SequenceSize() 
+	int SequenceSize() const
 	{
 		return adjacent->GetLength();
 	}
-	Edge<T> GetEdge()
+	// nullptr if not found
+	Edge<T>* GetEdge(T vertex) const
 	{
-		
-	}
-	int EdgeLength(T vertex) 
-	{
-		int vertexIndex = Find(vertex);
+		AdjacentEdgesIterator iter = begin();
 
-		if (vertexIndex == -1)
+		for (int i = 0; (iter != end()) && (i < SequenceSize()); ++iter, ++i)
+		{
+			if ((*iter)->GetEnd() == vertex)
+			{
+				return *iter;
+			}
+		}
+		return nullptr;
+	}
+	int EdgeLength(T vertex) const
+	{
+		Edge<T>* edge = GetEdge(vertex);
+
+		if (edge == nullptr)
 			throw vertex_not_found("No connection or vertex does not exist");
 
-		return adjacent->Get(vertexIndex).second;
+		return edge->GetLength();
 	}
 	void SetAdjacent(T vertex, int distance)
 	{
-		int vertexIndex = Find(vertex);
+		Edge<T>* edge = GetEdge(vertex);
 
-		if (vertexIndex == -1)
-			adjacent->Append(std::make_pair(vertex, distance));
+		if (edge == nullptr)
+			adjacent->Append(new Edge<T>(vertex, distance));
 		else
-			adjacent->Set(std::make_pair(vertex, distance), vertexIndex);
+			edge->SetLength(distance);
 	}
 	void RemoveAdjacent(T vertex)
 	{
@@ -62,26 +72,26 @@ public:
 		if (vertexIndex == -1)
 			throw vertex_not_found("No connection or vertex does not exist");
 
-		dynamic_cast<ListSequence<std::pair<T, int>>*>(adjacent)->Remove(vertexIndex);
+		dynamic_cast<ListSequence<Edge<T>*>*>(adjacent)->Remove(vertexIndex);
 	}
 	
-	AdjacentEdgesIterator begin()
+	AdjacentEdgesIterator begin() const
 	{
 		return *dynamic_cast<AdjacentEdgesIterator*>(adjacent->begin());
 	}
-	AdjacentEdgesIterator end()
+	AdjacentEdgesIterator end() const
 	{
 		return *dynamic_cast<AdjacentEdgesIterator*>(adjacent->end());
 	}
 
 private:
-	int Find(T vertex) 
+	int Find(T vertex) const
 	{
 		AdjacentEdgesIterator iter = begin();
 
 		for (int i = 0; (iter != end()) && (i < SequenceSize()); ++iter, ++i)
 		{
-			if ((*iter).first == vertex)
+			if ((*iter)->GetEnd() == vertex)
 			{
 				return i;
 			}

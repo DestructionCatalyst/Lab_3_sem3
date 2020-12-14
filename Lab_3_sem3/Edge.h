@@ -22,7 +22,7 @@ public:
 		return length;
 	}
 
-	void setLength(int newLength)
+	void SetLength(int newLength)
 	{
 		length = newLength;
 	}
