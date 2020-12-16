@@ -12,12 +12,13 @@ class Graph {
 public:
 	typedef iterators::ListIterator<std::pair<T, int>> AdjacentVerticesIterator;
 	typedef dictionary::HashMapIterator<T, AdjacencyList<T>*> GraphIterator;
-public:
+private:
 	IDictionary<T, AdjacencyList<T>*>* vertices;
 
+	std::function<int(T, int)> hashFunction;
 public:
 	Graph(std::function<int(T, int)> hashFunc):
-		vertices(new HashMap<T, AdjacencyList<T>*>(hashFunc))
+		vertices(new HashMap<T, AdjacencyList<T>*>(hashFunc)), hashFunction(hashFunc)
 	{}
 
 	int VertexCount()
@@ -138,4 +139,22 @@ private:
 			throw vertex_not_found("No such vertex in the graph");
 		}
 	}
+
+	template<class T1>
+	friend Graph<T1>* Merge(Graph<T1>* g1, Graph<T1>* g2);
 };
+
+/*
+template<class T1>
+Graph<T1>* Merge(Graph<T1>* g1, Graph<T1>* g2)
+{
+	Graph<T1>* res = new Graph<T1>(g1->hashFunction);
+
+	auto iter = g1->begin();
+
+	for(; iter != g1->end(); ++iter)
+		res->vertices->Add(*iter.first, *)
+	
+	return NULL;
+}
+*/

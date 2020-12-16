@@ -93,7 +93,18 @@ void topologyGenerationTest()
             else
                 TestEnvironment::Assert(!c10->AreConnected(i, j));
     
+    Graph<int>* w5 = IntegerGraphFactory::Wheel(5, 1, Direction::BIDIRECTIONAL, Direction::TO_CENTER);
 
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            if ((j == i + 1) || (i == 3 && j == 0)) 
+            {
+                TestEnvironment::Assert(w5->AreConnected(i, j));
+                TestEnvironment::Assert(w5->AreConnected(j, i));
+            }
+            
+    for(int i = 0; i < 4; i++)
+        TestEnvironment::Assert(w5->AreConnected(i, 4));
 }
 
 int main()
