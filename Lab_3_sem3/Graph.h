@@ -10,7 +10,7 @@ using namespace dictionary;
 template<class T>
 class Graph {
 public:
-	typedef iterators::ListIterator<std::pair<T, int>> AdjacentVerticesIterator;
+	typedef iterators::ListIterator<Edge<T>*> AdjacentVerticesIterator;
 	typedef dictionary::HashMapIterator<T, AdjacencyList<T>*> GraphIterator;
 private:
 	IDictionary<T, AdjacencyList<T>*>* vertices;
@@ -85,6 +85,8 @@ public:
 		if (edgeStart == edgeEnd)
 			throw std::invalid_argument("Loop to itself not allowed!");
 
+		TryGetAdjacent(edgeEnd);
+
 		TryGetAdjacent(edgeStart)->SetAdjacent(edgeEnd, length);
 	}
 
@@ -109,6 +111,11 @@ public:
 			Remove(vertex2, vertex1);
 		}
 		catch (vertex_not_found e) {}
+	}
+
+	std::function<int(T, int)> GetHashFunction()
+	{
+		return hashFunction;
 	}
 
 public:

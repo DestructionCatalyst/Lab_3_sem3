@@ -154,6 +154,10 @@ namespace sequences {
 			
 			return funcResult;
 		}
+		void Swap(int item1, int item2)
+		{
+			throw std::exception();
+		}
 
 		~ListSequence()
 		{

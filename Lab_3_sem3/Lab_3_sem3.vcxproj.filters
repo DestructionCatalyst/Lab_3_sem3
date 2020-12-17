@@ -116,9 +116,6 @@
     <ClInclude Include="dependencies\UnitTest.h">
       <Filter>dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="dependencies\PairInOut.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="dependencies\ParseFunctions.h">
       <Filter>dependencies</Filter>
     </ClInclude>
@@ -133,6 +130,18 @@
     </ClInclude>
     <ClInclude Include="GraphFactory.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphPathfinder.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Optional.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\SequenceAssertions.h">
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\PairInOut.h">
+      <Filter>dependencies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

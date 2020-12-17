@@ -1,12 +1,14 @@
 ﻿#include <iostream>
 
 #include "dependencies/TestEnvironment.h"
-
+#include "dependencies/SequenceAssertions.h"
 #include "dependencies/HashMap.h"
+
 
 #include "AdjacencyList.h"
 #include "Graph.h"
 #include "GraphFactory.h"
+#include "GraphPathfinder.h"
 
 using namespace dictionary;
 
@@ -107,6 +109,43 @@ void topologyGenerationTest()
         TestEnvironment::Assert(w5->AreConnected(i, 4));
 }
 
+void testDijkstra() {
+    Graph<int>* g = IntegerGraphFactory::Cycle(10);
+
+    DijkstraPathfinder<int> p = DijkstraPathfinder<int>(g, 0);
+
+    p.Dijkstra();
+
+    p.GetPath(4);
+
+    Graph<int>* g1 = IntegerGraphFactory::Empty(11);
+
+    g1->SetBidirectionalEdge(0, 1, 1);
+    g1->SetBidirectionalEdge(2, 8, 3);
+    g1->SetBidirectionalEdge(2, 3, 10);
+    g1->SetBidirectionalEdge(2, 7, 16);
+    g1->SetBidirectionalEdge(3, 5, 7);
+    g1->SetBidirectionalEdge(5, 10, 5);
+    g1->SetBidirectionalEdge(4, 5, 6);
+    g1->SetBidirectionalEdge(4, 6, 1);
+    g1->SetBidirectionalEdge(5, 6, 9);
+    g1->SetBidirectionalEdge(7, 10, 2);
+
+    g1->SetAdjacent(0, 8, 3);
+    g1->SetAdjacent(1, 9, 7);
+    g1->SetAdjacent(1, 3, 10);
+    g1->SetAdjacent(9, 10, 11);
+    g1->SetAdjacent(3, 10, 9);
+    g1->SetAdjacent(2, 6, 5);
+    g1->SetAdjacent(6, 7, 1);
+
+    DijkstraPathfinder<int>* p1 = new DijkstraPathfinder<int>(g1, 0);
+
+    AssertSequenceEquals({ 0, 8, 2, 6, 7, 10 }, p1->GetPath(10));
+    ASSERT_EQUALS(14, p1->GetDistance(10))
+
+}
+
 int main()
 {
     TestEnvironment* env = new TestEnvironment();
@@ -114,6 +153,7 @@ int main()
     ADD_NEW_TEST(*env, "AdjacencyList test", testAdjacencyList);
     ADD_NEW_TEST(*env, "Basic graph test", basicGraphTest);
     ADD_NEW_TEST(*env, "Topology generation test", topologyGenerationTest);
+    ADD_NEW_TEST(*env, "Dijkstra test", testDijkstra);
 
     env->RunAll();
 

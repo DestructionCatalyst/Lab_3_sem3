@@ -25,10 +25,25 @@ enum class Direction
 class IntegerGraphFactory
 {
 public:
+	static Graph<int>* Empty(size_t vertexCount)
+	{
+		CheckVerticesMinimum(vertexCount, 1,
+			"To create a graph with no vertices, use graph constructor");
+
+		Graph<int>* res = new Graph<int>(intHash);
+
+		for (int i = 0; i < vertexCount; i++)
+		{
+			res->AddVertex(i);
+		}
+
+		return res;
+	}
+
 	static Graph<int>* Complete(size_t vertexCount, int defaultLength = 1)
 	{
 		CheckVerticesMinimum(vertexCount, 1,
-			"To create an empty graph, use graph constructor");
+			"To create a graph with no vertices, use graph constructor");
 
 		Graph<int>* res = new Graph<int>(intHash);
 

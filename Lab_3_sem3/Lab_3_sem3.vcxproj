@@ -176,6 +176,7 @@
     <ClInclude Include="dependencies\PairInOut.h" />
     <ClInclude Include="dependencies\ParseFunctions.h" />
     <ClInclude Include="dependencies\Sequence.h" />
+    <ClInclude Include="dependencies\SequenceAssertions.h" />
     <ClInclude Include="dependencies\SequenceIterator.h" />
     <ClInclude Include="dependencies\TestCase.h" />
     <ClInclude Include="dependencies\TestEnvironment.h" />
@@ -187,6 +188,8 @@
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphFactory.h" />
+    <ClInclude Include="GraphPathfinder.h" />
+    <ClInclude Include="Optional.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

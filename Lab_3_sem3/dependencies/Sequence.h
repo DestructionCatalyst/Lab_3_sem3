@@ -41,7 +41,7 @@ namespace sequences {
 		virtual const_iterator* end() const = 0;
 		virtual const_iterator* itemIterator(int index) const = 0;
 
-		//virtual void Swap(int item1, int item2) = 0;
+		virtual void Swap(int item1, int item2) = 0;
 
 		//virtual void Print() const = 0;
 
