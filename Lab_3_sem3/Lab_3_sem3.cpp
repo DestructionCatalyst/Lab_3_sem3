@@ -95,7 +95,7 @@ void topologyGenerationTest()
             else
                 TestEnvironment::Assert(!c10->AreConnected(i, j));
     
-    Graph<int>* w5 = IntegerGraphFactory::Wheel(5, 1, Direction::BIDIRECTIONAL, Direction::TO_CENTER);
+    Graph<int>* w5 = IntegerGraphFactory::Wheel(5, 1, 1, Direction::BIDIRECTIONAL, Direction::TO_CENTER);
 
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)

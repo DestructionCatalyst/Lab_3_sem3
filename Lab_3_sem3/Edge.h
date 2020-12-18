@@ -5,11 +5,11 @@ class Edge {
 private:
 	T endVertex;
 
-	int length;
+	int weight;
 
 public:
 	Edge(T endVertex, int length):
-		endVertex(endVertex), length(length)
+		endVertex(endVertex), weight(length)
 	{}
 
 	T GetEnd()
@@ -17,13 +17,13 @@ public:
 		return endVertex;
 	}
 
-	int GetLength()
+	int GetWeight()
 	{
-		return length;
+		return weight;
 	}
 
-	void SetLength(int newLength)
+	void SetWeight(int newLength)
 	{
-		length = newLength;
+		weight = newLength;
 	}
 };

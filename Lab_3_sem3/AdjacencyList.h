@@ -54,7 +54,7 @@ public:
 		if (edge == nullptr)
 			throw vertex_not_found("No connection or vertex does not exist");
 
-		return edge->GetLength();
+		return edge->GetWeight();
 	}
 	void SetAdjacent(T vertex, int distance)
 	{
@@ -63,7 +63,7 @@ public:
 		if (edge == nullptr)
 			adjacent->Append(new Edge<T>(vertex, distance));
 		else
-			edge->SetLength(distance);
+			edge->SetWeight(distance);
 	}
 	void RemoveAdjacent(T vertex)
 	{

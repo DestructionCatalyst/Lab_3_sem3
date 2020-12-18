@@ -105,14 +105,15 @@ public:
 
 	static Graph<int>* Wheel(
 		size_t vertexCount,
-		int defaultLength = 1,
+		int sideLength = 1,
+		int ribLength = 1,
 		Direction circleDirection = Direction::BIDIRECTIONAL,
 		Direction raysDirection = Direction::BIDIRECTIONAL
 	)
 	{
 		CheckVerticesMinimum(vertexCount, 4, "Wheel must contain at least 4 vertices");
 
-		Graph<int>* res = Cycle(vertexCount - 1, defaultLength, circleDirection);
+		Graph<int>* res = Cycle(vertexCount - 1, sideLength, circleDirection);
 
 		res->AddVertex(vertexCount - 1);
 
@@ -123,7 +124,7 @@ public:
 			auto tmp = *iter;
 
 			if (tmp.first != vertexCount - 1)
-				AddConnection(res, tmp.first, vertexCount - 1, defaultLength, raysDirection);
+				AddConnection(res, tmp.first, vertexCount - 1, ribLength, raysDirection);
 		}
 
 		return res;

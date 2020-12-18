@@ -9,9 +9,9 @@
 template<class T>
 class DijkstraPathfinder
 {
+public:
+	static const int inf = std::numeric_limits<int>::max() / 2;
 private:
-	const int inf = std::numeric_limits<int>::max() / 2;
-
 	Graph<T>* graph;
 	int n;
 
@@ -84,7 +84,7 @@ public:
 			for (; adjIter != graph->AdjacentEnd(); ++adjIter)
 			{
 				tmp = (*adjIter)->GetEnd();
-				int len = (*adjIter)->GetLength();
+				int len = (*adjIter)->GetWeight();
 
 				if (distances->Get(*v) + len < distances->Get(tmp))
 				{
