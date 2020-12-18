@@ -9,6 +9,7 @@
 #include "Graph.h"
 #include "GraphFactory.h"
 #include "GraphPathfinder.h"
+#include "MaxStreamFinder.h"
 
 using namespace dictionary;
 
@@ -146,6 +147,36 @@ void testDijkstra() {
 
 }
 
+void testEdmondsKarp()
+{
+    Graph<int>* g = IntegerGraphFactory::Wheel(6, 2, 1, Direction::CLOCKWISE);
+
+    EdmondsKarpStreamFinder<int>* f = new EdmondsKarpStreamFinder<int>(g, 0, 3);
+
+    ASSERT_EQUALS(f->FindStream(), 3);
+
+    Graph<int>* g1 = IntegerGraphFactory::Empty(9);
+
+    g1->SetBidirectionalEdge(2, 3, 1);
+    g1->SetBidirectionalEdge(3, 4, 3);
+    g1->SetBidirectionalEdge(4, 5, 2);
+    g1->SetBidirectionalEdge(4, 6, 9);
+    g1->SetBidirectionalEdge(5, 6, 5);
+
+    g1->SetAdjacent(0, 1, 5);
+    g1->SetAdjacent(0, 5, 11);
+    g1->SetAdjacent(1, 2, 2);
+    g1->SetAdjacent(1, 3, 1);
+    g1->SetAdjacent(2, 7, 4);
+    g1->SetAdjacent(3, 7, 3);
+    g1->SetAdjacent(6, 8, 4);
+    g1->SetAdjacent(7, 8, 12);
+
+    EdmondsKarpStreamFinder<int>* f1 = new EdmondsKarpStreamFinder<int>(g1, 0, 8);
+
+    ASSERT_EQUALS(f1->FindStream(), 10);
+}
+
 int main()
 {
     TestEnvironment* env = new TestEnvironment();
@@ -154,6 +185,7 @@ int main()
     ADD_NEW_TEST(*env, "Basic graph test", basicGraphTest);
     ADD_NEW_TEST(*env, "Topology generation test", topologyGenerationTest);
     ADD_NEW_TEST(*env, "Dijkstra test", testDijkstra);
+    ADD_NEW_TEST(*env, "Edmonds-Karp algorithm test", testEdmondsKarp);
 
     env->RunAll();
 

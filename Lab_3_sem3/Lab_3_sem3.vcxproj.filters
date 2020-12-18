@@ -143,5 +143,8 @@
     <ClInclude Include="dependencies\PairInOut.h">
       <Filter>dependencies</Filter>
     </ClInclude>
+    <ClInclude Include="MaxStreamFinder.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

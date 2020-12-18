@@ -78,13 +78,13 @@ public:
 			
 			checked->Add(*v, true);
 			
-			auto adjIter = graph->AdjacentIterator(*v);
+			auto edgeIter = graph->AdjacentIterator(*v);
 
 			//Relaxation
-			for (; adjIter != graph->AdjacentEnd(); ++adjIter)
+			for (; edgeIter != graph->AdjacentEnd(); ++edgeIter)
 			{
-				tmp = (*adjIter)->GetEnd();
-				int len = (*adjIter)->GetWeight();
+				tmp = (*edgeIter)->GetEnd();
+				int len = (*edgeIter)->GetWeight();
 
 				if (distances->Get(*v) + len < distances->Get(tmp))
 				{

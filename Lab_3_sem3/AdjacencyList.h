@@ -99,5 +99,26 @@ private:
 		return -1;
 
 	}
+public:
+	template<class T1>
+	friend std::ostream& operator<< (std::ostream& stream, AdjacencyList<T1>& list);
 };
 
+template<class T1>
+std::ostream& operator<<(std::ostream& stream, AdjacencyList<T1>& list)
+{
+	auto iter = list.begin();
+
+	stream << '[';
+
+	while(iter != list.end()) {
+		stream << **iter;
+
+		if (++iter != list.end())
+			stream << ", ";
+	}
+
+	stream << ']';
+
+	return stream;
+}

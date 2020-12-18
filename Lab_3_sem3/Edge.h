@@ -26,4 +26,16 @@ public:
 	{
 		weight = newLength;
 	}
+
+	template<class T1>
+	friend std::ostream& operator<< (std::ostream& stream, Edge<T1>& graph);
 };
+
+template<class T1>
+std::ostream& operator<<(std::ostream& stream, Edge<T1>& edge)
+{
+	if(edge.GetWeight() != 0)
+		stream << "-[" << edge.GetWeight() << "]->(" << edge.GetEnd() << ")";
+
+	return stream;
+}

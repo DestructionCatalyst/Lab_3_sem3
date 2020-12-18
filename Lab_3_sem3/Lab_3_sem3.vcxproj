@@ -189,6 +189,7 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphFactory.h" />
     <ClInclude Include="GraphPathfinder.h" />
+    <ClInclude Include="MaxStreamFinder.h" />
     <ClInclude Include="Optional.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

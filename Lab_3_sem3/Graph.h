@@ -146,10 +146,31 @@ private:
 			throw vertex_not_found("No such vertex in the graph");
 		}
 	}
+public:
 
 	template<class T1>
 	friend Graph<T1>* Merge(Graph<T1>* g1, Graph<T1>* g2);
+
+	template<class T1>
+	friend std::ostream& operator<< (std::ostream& stream, Graph<T1>& graph);
 };
+
+template<class T1>
+std::ostream& operator<<(std::ostream& stream, Graph<T1>& graph)
+{
+	auto iter = graph.begin();
+
+	stream << '{';
+
+	for (; iter != graph.end(); ++iter)
+	{
+		stream << (*iter).first << ": " << *((*iter).second) << "; ";
+	}
+
+	stream << '}';
+
+	return stream;
+}
 
 /*
 template<class T1>
@@ -161,7 +182,7 @@ Graph<T1>* Merge(Graph<T1>* g1, Graph<T1>* g2)
 
 	for(; iter != g1->end(); ++iter)
 		res->vertices->Add(*iter.first, *)
-	
+
 	return NULL;
 }
 */
