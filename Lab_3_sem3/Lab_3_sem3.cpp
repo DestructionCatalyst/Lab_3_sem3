@@ -13,6 +13,12 @@
 
 using namespace dictionary;
 
+using std::cin;
+using std::cout;
+using std::endl;
+
+#define INPUT_INCORRECT_IF(CONDITION) if(CONDITION) command = -1; break;
+
 void testAdjacencyList()
 {
     AdjacencyList<int>* adjacent = new AdjacencyList<int>();
@@ -177,8 +183,78 @@ void testEdmondsKarp()
     ASSERT_EQUALS(f1->FindStream(), 10);
 }
 
+void inputNumber(int* number)
+{
+    try
+    {
+        std::cin >> *number;
+    }
+    catch (...)
+    {
+        *number = -1;
+    }
+}
+
+Graph<int>* createGraphWithTopology(int topology, int size)
+{
+    switch (topology)
+    {
+    case 1:
+        return IntegerGraphFactory::Empty(size);
+    case 2:
+        cout << "Input edge weight\n";
+        
+        int weight;
+
+        inputNumber(&weight);
+    default:
+        break;
+    }
+}
+
 int main()
 {
+    int command = -1;
+    Graph<int>* graph;
+
+    while (command != 9)
+    {
+        //header();
+
+        inputNumber(&command);
+
+        switch (command)
+        {
+        case 1:
+            cout << "Input vertex count:\n" << std::endl;
+            
+            int vertexCount;
+            inputNumber(&vertexCount);
+
+            INPUT_INCORRECT_IF(vertexCount < 0);
+
+            cout << "Select topology:\n";
+            cout << "1 - empty graph\n";
+            cout << "2 - complete graph\n";
+            cout << "3 - chain graph\n";
+            cout << "4 - cycle graph\n";
+            cout << "5 - wheel graph\n";
+
+            int topology;
+            inputNumber(&topology);
+
+            INPUT_INCORRECT_IF(topology < 1 && topology > 5);
+
+
+
+            break;
+        default:
+            cin.clear();
+            cin.ignore(32767, '\n');
+            cout << "Incorrect input!" << endl;
+        }
+    }
+
     TestEnvironment* env = new TestEnvironment();
 
     ADD_NEW_TEST(*env, "AdjacencyList test", testAdjacencyList);

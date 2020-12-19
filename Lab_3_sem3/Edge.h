@@ -27,6 +27,11 @@ public:
 		weight = newLength;
 	}
 
+	~Edge()
+	{
+		delete(endVertex);
+	}
+
 	template<class T1>
 	friend std::ostream& operator<< (std::ostream& stream, Edge<T1>& graph);
 };

@@ -147,6 +147,11 @@ private:
 		}
 	}
 public:
+	~Graph()
+	{
+		delete(vertices);
+	}
+public:
 
 	template<class T1>
 	friend Graph<T1>* Merge(Graph<T1>* g1, Graph<T1>* g2);

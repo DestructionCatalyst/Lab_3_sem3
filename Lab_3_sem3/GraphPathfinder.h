@@ -139,5 +139,12 @@ public:
 
 		return path;
 	}
+
+	~DijkstraPathfinder()
+	{
+		delete(distances);
+		delete(checked);
+		delete(prev);
+	}
 	
 };

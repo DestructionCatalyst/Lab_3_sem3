@@ -15,6 +15,8 @@ private:
 	T startVertex;
 	T endVertex;
 
+	bool algorithmStarted = false;
+	bool streamsInUse = false;
 public:
 	EdmondsKarpStreamFinder<T>(Graph<T>* graph, T startVertex, T endVertex):
 		maxStreams(graph), startVertex(startVertex), endVertex(endVertex),
@@ -53,6 +55,7 @@ public:
 
 	int FindStream()
 	{
+		algorithmStarted = true;
 
 		while (true)
 		{
@@ -79,8 +82,21 @@ public:
 		return -sum;
 	}
 
+	Graph<T>* GetStreams()
+	{
+		if (!algorithmStarted)
+			FindStream();
+
+		streamsInUse = true;
+
+		return currentStreams;
+	}
+
+private:
 	void CreateRemainingGrid()
 	{
+		delete(remainingGrid);
+
 		remainingGrid = new Graph<T>(maxStreams->GetHashFunction());
 
 		auto vertexIter = maxStreams->begin();
@@ -140,5 +156,13 @@ public:
 		}
 	}
 
+public:
+	~EdmondsKarpStreamFinder()
+	{
+		if(!streamsInUse)
+			delete(currentStreams);
+
+		delete(remainingGrid);
+	}
 
 };

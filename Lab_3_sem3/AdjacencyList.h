@@ -99,6 +99,11 @@ private:
 		return -1;
 
 	}
+
+	~AdjacencyList()
+	{
+		delete(adjacent);
+	}
 public:
 	template<class T1>
 	friend std::ostream& operator<< (std::ostream& stream, AdjacencyList<T1>& list);
