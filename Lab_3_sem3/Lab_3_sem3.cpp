@@ -4,12 +4,13 @@
 #include "dependencies/SequenceAssertions.h"
 #include "dependencies/HashMap.h"
 
-
 #include "AdjacencyList.h"
 #include "Graph.h"
 #include "GraphFactory.h"
 #include "GraphPathfinder.h"
 #include "MaxStreamFinder.h"
+
+#include "GraphTests.h"
 
 using namespace dictionary;
 
@@ -17,183 +18,15 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-#define INPUT_INCORRECT_IF(CONDITION) if(CONDITION) command = -1; break;
-
-void testAdjacencyList()
-{
-    AdjacencyList<int>* adjacent = new AdjacencyList<int>();
-
-    adjacent->SetAdjacent(1, 2);
-    adjacent->SetAdjacent(2, 4);
-    adjacent->SetAdjacent(3, 8);
-    adjacent->SetAdjacent(4, 16);
-    adjacent->SetAdjacent(5, 32);
-
-    ASSERT_EQUALS(adjacent->EdgeLength(3), 8);
-
-    adjacent->SetAdjacent(4, 8);
-
-    ASSERT_EQUALS(adjacent->EdgeLength(4), 8);
-
-    adjacent->RemoveAdjacent(2);
-
-    ASSERT_THROWS(adjacent->EdgeLength(2), vertex_not_found);
-
-    ASSERT_EQUALS(adjacent->SequenceSize(), 4);
-}
-
-void basicGraphTest()
-{
-    Graph<int>* g = new Graph<int>([](int a, int b)->int {return a % b;});
-
-    ASSERT_THROWS(g->EdgeLength(1, 2), vertex_not_found);
-
-    g->AddVertex(1);
-    g->AddVertex(2);
-    g->AddVertex(3);
-
-    g->SetBidirectionalEdge(1, 2, 4);
-    g->SetAdjacent(2, 3, 8);
-    g->SetAdjacent(1, 3, 20);
-
-    ASSERT_EQUALS(g->AdjacentCount(2), 2);
-    ASSERT_EQUALS(g->EdgeLength(1, 3), 20);
-    TestEnvironment::Assert(g->AreConnected(1, 3));
-
-    g->RemoveAdjacent(2, 3);
-    ASSERT_THROWS(g->EdgeLength(2, 3), vertex_not_found);
-    TestEnvironment::Assert(!g->AreConnected(2, 3));
-
-    g->RemoveVertex(3);
-
-    //std::cout << *dynamic_cast<HashMap<int, AdjacencyList<int>*>*>(g->vertices) << std::endl;
-    ASSERT_THROWS(g->EdgeLength(1, 3), vertex_not_found);
-
-    ASSERT_EQUALS(g->EdgeLength(1, 1), 0);
-
-
-}
-
-void topologyGenerationTest()
-{
-    Graph<int>* k7 = IntegerGraphFactory::Complete(7);
-
-    for(int i = 0; i < 7; i++)
-        for(int j = 0; j < 7; j++)
-            if (i != j) 
-                TestEnvironment::Assert(k7->AreConnected(i, j));
-            
-    Graph<int>* p10 = IntegerGraphFactory::Chain(10, 1, Direction::BACKWARDS);
-
-    
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < 10; j++)
-            if (i == j + 1)
-                TestEnvironment::Assert(p10->AreConnected(i, j));
-            else
-                TestEnvironment::Assert(!p10->AreConnected(i, j));
-                
-    Graph<int>* c10 = IntegerGraphFactory::Cycle(10, 1, Direction::CLOCKWISE);
-
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < 10; j++)
-            if ((j == i + 1) || (i == 9 && j == 0))
-                TestEnvironment::Assert(c10->AreConnected(i, j));
-            else
-                TestEnvironment::Assert(!c10->AreConnected(i, j));
-    
-    Graph<int>* w5 = IntegerGraphFactory::Wheel(5, 1, 1, Direction::BIDIRECTIONAL, Direction::TO_CENTER);
-
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            if ((j == i + 1) || (i == 3 && j == 0)) 
-            {
-                TestEnvironment::Assert(w5->AreConnected(i, j));
-                TestEnvironment::Assert(w5->AreConnected(j, i));
-            }
-            
-    for(int i = 0; i < 4; i++)
-        TestEnvironment::Assert(w5->AreConnected(i, 4));
-}
-
-void testDijkstra() {
-    Graph<int>* g = IntegerGraphFactory::Cycle(10);
-
-    DijkstraPathfinder<int> p = DijkstraPathfinder<int>(g, 0);
-
-    p.Dijkstra();
-
-    p.GetPath(4);
-
-    Graph<int>* g1 = IntegerGraphFactory::Empty(11);
-
-    g1->SetBidirectionalEdge(0, 1, 1);
-    g1->SetBidirectionalEdge(2, 8, 3);
-    g1->SetBidirectionalEdge(2, 3, 10);
-    g1->SetBidirectionalEdge(2, 7, 16);
-    g1->SetBidirectionalEdge(3, 5, 7);
-    g1->SetBidirectionalEdge(5, 10, 5);
-    g1->SetBidirectionalEdge(4, 5, 6);
-    g1->SetBidirectionalEdge(4, 6, 1);
-    g1->SetBidirectionalEdge(5, 6, 9);
-    g1->SetBidirectionalEdge(7, 10, 2);
-
-    g1->SetAdjacent(0, 8, 3);
-    g1->SetAdjacent(1, 9, 7);
-    g1->SetAdjacent(1, 3, 10);
-    g1->SetAdjacent(9, 10, 11);
-    g1->SetAdjacent(3, 10, 9);
-    g1->SetAdjacent(2, 6, 5);
-    g1->SetAdjacent(6, 7, 1);
-
-    DijkstraPathfinder<int>* p1 = new DijkstraPathfinder<int>(g1, 0);
-
-    AssertSequenceEquals({ 0, 8, 2, 6, 7, 10 }, p1->GetPath(10));
-    ASSERT_EQUALS(14, p1->GetDistance(10))
-
-}
-
-void testEdmondsKarp()
-{
-    Graph<int>* g = IntegerGraphFactory::Wheel(6, 2, 1, Direction::CLOCKWISE);
-
-    EdmondsKarpStreamFinder<int>* f = new EdmondsKarpStreamFinder<int>(g, 0, 3);
-
-    ASSERT_EQUALS(f->FindStream(), 3);
-
-    Graph<int>* g1 = IntegerGraphFactory::Empty(9);
-
-    g1->SetBidirectionalEdge(2, 3, 1);
-    g1->SetBidirectionalEdge(3, 4, 3);
-    g1->SetBidirectionalEdge(4, 5, 2);
-    g1->SetBidirectionalEdge(4, 6, 9);
-    g1->SetBidirectionalEdge(5, 6, 5);
-
-    g1->SetAdjacent(0, 1, 5);
-    g1->SetAdjacent(0, 5, 11);
-    g1->SetAdjacent(1, 2, 2);
-    g1->SetAdjacent(1, 3, 1);
-    g1->SetAdjacent(2, 7, 4);
-    g1->SetAdjacent(3, 7, 3);
-    g1->SetAdjacent(6, 8, 4);
-    g1->SetAdjacent(7, 8, 12);
-
-    EdmondsKarpStreamFinder<int>* f1 = new EdmondsKarpStreamFinder<int>(g1, 0, 8);
-
-    ASSERT_EQUALS(f1->FindStream(), 10);
-}
-
 void inputNumber(int* number)
 {
-    try
-    {
-        std::cin >> *number;
-    }
-    catch (...)
+    std::cin >> *number;
+
+    if (std::cin.fail()) 
     {
         cin.clear();
         cin.ignore(32767, '\n');
-        cout << "Incorrect input!" << endl;
+        //cout << "Incorrect input!" << endl;
         *number = -1;
     }
 }
@@ -204,6 +37,7 @@ int inputNumberInRange(int lowerBound = 0, int upperBound = INT_MAX)
 
     do
     {
+        cout << "> ";
         inputNumber(&number);
 
         if (number < lowerBound || number > upperBound)
@@ -303,88 +137,196 @@ Graph<int>* createGraphWithTopology(int topology, int size)
     }
 }
 
+void header()
+{
+    cout << "Commands:\n"
+        << "1. Create graph\n"
+        << "2. Add vertex\n"
+        << "3. Add edge\n"
+        << "4. Add bidirectional edge\n"
+        << "5. Remove vertex\n"
+        << "6. Remove edge\n"
+        << "7. Find shortest way (Dijkstra algorithm)\n"
+        << "8. Find maximum stream (Edmonds-Karp algorithm)\n"
+        << "9. Print graph\n"
+        << "10. Run tests\n"
+        << "0. Exit\n";
+}
+
 int main()
 {
     int command = -1;
     Graph<int>* graph = nullptr;
+    int index = 0;
 
     while (command != 0)
     {
-        //header();
+        header();
         int vertexCount = 0;
         int topology = 0;
 
-        int edgeStart = 0;
-        int edgeEnd = 0;
+        int start = 0;
+        int end = 0;
+        int edgeWeight = 0;
 
-        inputNumber(&command);
+        command = inputNumberInRange(0, 10);
 
-        switch (command)
-        {
-        case 1:
-            if (graph != nullptr) {
-                delete(graph);
-                graph = nullptr;
+        TestEnvironment* env = new TestEnvironment();
+
+        ADD_NEW_TEST(*env, "AdjacencyList test", testAdjacencyList);
+        ADD_NEW_TEST(*env, "Basic graph test", basicGraphTest);
+        ADD_NEW_TEST(*env, "Topology generation test", topologyGenerationTest);
+        ADD_NEW_TEST(*env, "Dijkstra test", testDijkstra);
+        ADD_NEW_TEST(*env, "Edmonds-Karp algorithm test", testEdmondsKarp);
+
+        try {
+            switch (command)
+            {
+            case 1:
+                if (graph != nullptr) {
+                    delete(graph);
+                    graph = nullptr;
+                }
+
+                cout << "Select topology:\n";
+                cout << "1 - empty graph\n";
+                cout << "2 - complete graph\n";
+                cout << "3 - chain graph\n";
+                cout << "4 - cycle graph\n";
+                cout << "5 - wheel graph\n";
+
+                topology = inputNumberInRange(1, 5);
+
+                graph = createGraphWithTopology(topology, vertexCount);
+
+                index = graph->VertexCount();
+
+                cout << "Graph successfully created\n";
+                break;
+            case 2:
+                if (graph != nullptr) {
+                    graph->AddVertex(index);
+                    cout << "Added vertex with index " << index << '\n';
+                    index++;
+                }
+                else
+                    cout << "Create graph first!\n";
+
+                break;
+            case 3:
+                if (graph != nullptr) {
+                    cout << "Input edge start\n";
+                    start = inputNumberInRange(0, index - 1);
+
+                    cout << "Input edge end\n";
+                    end = inputNumberInRange(0, index - 1);
+
+                    cout << "Input edge weight\n";
+                    edgeWeight = inputNumberInRange();
+
+                    graph->SetAdjacent(start, end, edgeWeight);
+                }
+                else
+                    cout << "Create graph first!\n";
+                break;
+            case 4:
+                if (graph != nullptr) {
+                    cout << "Input first vertex\n";
+                    start = inputNumberInRange(0, index - 1);
+
+                    cout << "Input second vertex\n";
+                    end = inputNumberInRange(0, index - 1);
+
+                    cout << "Input edge weight\n";
+                    edgeWeight = inputNumberInRange();
+
+                    graph->SetBidirectionalEdge(start, end, edgeWeight);
+                }
+                else
+                    cout << "Create graph first!\n";
+                break;
+            case 5:
+                if (graph != nullptr) {
+                    cout << "Input vertex index\n";
+                    start = inputNumberInRange(0, index - 1);
+
+                    graph->RemoveVertex(start);
+                }
+                else
+                    cout << "Create graph first!\n";
+                break;
+            case 6:
+                if (graph != nullptr) {
+                    cout << "Input edge start\n";
+                    start = inputNumberInRange(0, index - 1);
+
+                    cout << "Input edge end\n";
+                    end = inputNumberInRange(0, index - 1);
+
+                    graph->RemoveAdjacent(start, end);
+                }
+                else
+                    cout << "Create graph first!\n";
+                break;
+            case 7:
+                if (graph != nullptr) {
+                    cout << "Input path start\n";
+                    start = inputNumberInRange(0, index - 1);
+
+                    cout << "Input path end\n";
+                    end = inputNumberInRange(0, index - 1);
+
+                    DijkstraPathfinder<int>* pathfinder = new DijkstraPathfinder<int>(graph, start);
+
+                    cout << *dynamic_cast<ArraySequence<int>*>(pathfinder->GetPath(end)) << ", distance = "
+                        << pathfinder->GetDistance(end) << '\n';
+
+                    delete(pathfinder);
+                }
+                else
+                    cout << "Create graph first!\n";
+                break;
+            case 8:
+                if (graph != nullptr) {
+                    cout << "Input stream start\n";
+                    start = inputNumberInRange(0, index - 1);
+
+                    cout << "Input stream end\n";
+                    end = inputNumberInRange(0, index - 1);
+
+                    EdmondsKarpStreamFinder<int>* streams = new EdmondsKarpStreamFinder<int>(graph, start, end);
+
+                    cout << "Max stream = " << streams->FindStream() << '\n'
+                        << *streams->GetStreams() << '\n';
+
+                }
+                else
+                    cout << "Create graph first!\n";
+                break;
+            case 9:
+                if (graph != nullptr)
+                    cout << *graph << endl;
+                else
+                    cout << "Create graph first!\n";
+
+                break;
+            case 10:
+                env->RunAll();
+            default:
+                cin.clear();
+                cin.ignore(32767, '\n');
+                //cout << "Incorrect input!" << endl;
             }
-
-            cout << "Select topology:\n";
-            cout << "1 - empty graph\n";
-            cout << "2 - complete graph\n";
-            cout << "3 - chain graph\n";
-            cout << "4 - cycle graph\n";
-            cout << "5 - wheel graph\n";
-
-            topology = inputNumberInRange(1, 5);
-
-            graph = createGraphWithTopology(topology, vertexCount);
-
-            cout << "Graph successfully created\n";
-            break;
-        case 2:
-            if (graph != nullptr) {
-                graph->AddVertex(graph->VertexCount());
-                cout << "Added vertex with index " << graph->VertexCount() - 1 << '\n';
-            }
-            else
-                cout << "Create graph first!\n";
-
-            break;
-        case 3:
-            if (graph != nullptr) {
-                cout << "Input edge start\n";
-                edgeStart = inputNumberInRange(0, graph->VertexCount() - 1);
-
-                cout << "Input edge end\n";
-                edgeEnd = inputNumberInRange(0, graph->VertexCount() - 1);
-
-                cout << 
-            }
-            else
-                cout << "Create graph first!\n";
-            break;
-        case 9:
-            if (graph != nullptr)
-                cout << *graph << endl;
-            else
-                cout << "Create graph first!\n";
-
-            break;
-        default:
-            cin.clear();
-            cin.ignore(32767, '\n');
-            //cout << "Incorrect input!" << endl;
+        }
+        catch (vertex_not_found e) {
+            cout << "Exception occured! " << e.what() << '\n';
+        }
+        catch (std::invalid_argument e) {
+            cout << "Exception occured! " << e.what() << '\n';
         }
     }
 
-    TestEnvironment* env = new TestEnvironment();
-
-    ADD_NEW_TEST(*env, "AdjacencyList test", testAdjacencyList);
-    ADD_NEW_TEST(*env, "Basic graph test", basicGraphTest);
-    ADD_NEW_TEST(*env, "Topology generation test", topologyGenerationTest);
-    ADD_NEW_TEST(*env, "Dijkstra test", testDijkstra);
-    ADD_NEW_TEST(*env, "Edmonds-Karp algorithm test", testEdmondsKarp);
-
-    env->RunAll();
+    
 
 }
 

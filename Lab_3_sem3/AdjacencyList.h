@@ -117,10 +117,17 @@ std::ostream& operator<<(std::ostream& stream, AdjacencyList<T1>& list)
 	stream << '[';
 
 	while(iter != list.end()) {
-		stream << **iter;
+		
+		Edge<T1>* edge = *iter;
 
-		if (++iter != list.end())
-			stream << ", ";
+		if (edge->GetWeight() > 0) {
+			stream << *edge;
+
+			if (++iter != list.end())
+				stream << ", ";
+		}
+		else
+			++iter;
 	}
 
 	stream << ']';

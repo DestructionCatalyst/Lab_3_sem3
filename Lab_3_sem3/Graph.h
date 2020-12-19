@@ -154,9 +154,6 @@ public:
 public:
 
 	template<class T1>
-	friend Graph<T1>* Merge(Graph<T1>* g1, Graph<T1>* g2);
-
-	template<class T1>
 	friend std::ostream& operator<< (std::ostream& stream, Graph<T1>& graph);
 };
 
@@ -176,18 +173,3 @@ std::ostream& operator<<(std::ostream& stream, Graph<T1>& graph)
 
 	return stream;
 }
-
-/*
-template<class T1>
-Graph<T1>* Merge(Graph<T1>* g1, Graph<T1>* g2)
-{
-	Graph<T1>* res = new Graph<T1>(g1->hashFunction);
-
-	auto iter = g1->begin();
-
-	for(; iter != g1->end(); ++iter)
-		res->vertices->Add(*iter.first, *)
-
-	return NULL;
-}
-*/

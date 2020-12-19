@@ -155,6 +155,8 @@
     <ClCompile Include="dependencies\TimedTestCase.cpp" />
     <ClCompile Include="dependencies\Timer.cpp" />
     <ClCompile Include="dependencies\UnitTest.cpp" />
+    <ClCompile Include="GraphTests.cpp" />
+    <ClCompile Include="IntHash.cpp" />
     <ClCompile Include="Lab_3_sem3.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +191,8 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphFactory.h" />
     <ClInclude Include="GraphPathfinder.h" />
+    <ClInclude Include="GraphTests.h" />
+    <ClInclude Include="IntHash.h" />
     <ClInclude Include="MaxStreamFinder.h" />
     <ClInclude Include="Optional.h" />
   </ItemGroup>

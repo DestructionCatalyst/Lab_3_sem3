@@ -22,6 +22,9 @@ public:
 		maxStreams(graph), startVertex(startVertex), endVertex(endVertex),
 		currentStreams(new Graph<T>(graph->GetHashFunction())), remainingGrid(new Graph<T>(graph->GetHashFunction()))
 	{
+		if (startVertex == endVertex)
+			throw std::invalid_argument("Start and end of a stream cannot be the same vertex!");
+
 		auto vertexIter = graph->begin();
 
 		for (; vertexIter != graph->end(); ++vertexIter)

@@ -45,6 +45,12 @@
     <ClCompile Include="dependencies\ParseFunctions.cpp">
       <Filter>dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="GraphTests.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="IntHash.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\ArrayIterator.h">
@@ -144,6 +150,12 @@
       <Filter>dependencies</Filter>
     </ClInclude>
     <ClInclude Include="MaxStreamFinder.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphTests.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="IntHash.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

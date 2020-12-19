@@ -39,8 +39,8 @@ public:
 template<class T1>
 std::ostream& operator<<(std::ostream& stream, Edge<T1>& edge)
 {
-	if(edge.GetWeight() != 0)
-		stream << "-[" << edge.GetWeight() << "]->(" << edge.GetEnd() << ")";
+	
+	stream << "-[" << edge.GetWeight() << "]->(" << edge.GetEnd() << ")";
 
 	return stream;
 }

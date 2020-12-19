@@ -2,9 +2,7 @@
 
 #include "Graph.h"
 
-int intHash(int number, int tableSize) {
-	return number % tableSize;
-}
+#include "IntHash.h"
 
 enum class Direction
 {
